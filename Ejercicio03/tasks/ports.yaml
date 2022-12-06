@@ -1,0 +1,21 @@
+- hosts: webservers
+  vars_files:
+    - ./group_vars/webservers/vars
+  tasks:
+  - name: Ufw ports
+    ufw:
+      rule: allow
+      port: "{{ item }}"
+      proto: tcp
+    loop: "{{webservers_vars}}"
+    #loop: ['22','80','443','3306']
+    when: ansible_facts['os_family'] == "Debian"
+  - name: Firewalld ports
+    ansible.posix.firewalld:
+      port: '{{ item }}/tcp'
+      immediate: true
+      permanent: yes
+      state: enabled
+    loop: "{{webservers_vars}}"
+    #loop: ['22','80','443','3306']
+    when: ansible_facts['os_family'] == "Rocky"  

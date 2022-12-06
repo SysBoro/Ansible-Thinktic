@@ -1,0 +1,20 @@
+- name: Instalación de OpenSSH
+  hosts: webservers  
+  tasks:
+    - name: Instalando el paquete nginx
+      package:
+        name: nginx
+        state: latest
+    - name: Servicio Nginx arrancado
+      service: 
+        name: nginx
+        state: started
+        enabled: true
+    - name: Copia el fichero index.html
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/
+        owner: nginx
+        group: nginx
+        mode: '0644'
+

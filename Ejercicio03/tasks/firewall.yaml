@@ -1,0 +1,23 @@
+
+- hosts: webservers
+  tasks:
+    - name: Instalando Firewalld
+      package:
+        name: firewalld
+        state: latest
+    - name : Activar Firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+    - name : Firewall-python
+      package:
+        name: python-firewall
+        state: latest
+      when: ansible_facts['os_family'] == "Rocky"
+    - name : Activar Firewall
+      service:
+        name: ufw
+        state: started
+        enabled: true
+      when: ansible_facts['os_family'] == "Debian"

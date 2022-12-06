@@ -1,0 +1,14 @@
+- hosts: webservers
+  tasks:
+    - debug:
+        msg: "{{ansible_facts.os_family}}"
+- name: Deploy Firewall
+  import_playbook: tasks/firewall.yaml
+- name: Deploy SSH
+  import_playbook: tasks/ssh.yaml
+- name: Deploy nginx
+  import_playbook: tasks/nginx.yaml
+- name: Deploy mysql
+  import_playbook: tasks/mysql.yaml
+- name: Open ports
+  import_playbook: tasks/ports.yaml

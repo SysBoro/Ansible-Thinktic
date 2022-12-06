@@ -1,0 +1,12 @@
+- name: Instalación de OpenSSH
+  hosts: webservers
+  tasks:
+    - name: Instalando paquete Openssh
+      package:
+        name: openssh-server
+        state: latest
+    - name : Servicio openssh activado
+      service:
+        name: sshd
+        state: started
+        enabled: true

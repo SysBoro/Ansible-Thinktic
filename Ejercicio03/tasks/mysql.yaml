@@ -1,0 +1,18 @@
+
+- hosts: webservers
+  tasks:
+    - name: Instalación de mysql
+      package:
+        name: mysql-server
+        state: latest
+    - name: Servicio mysql.service
+      service:
+        name: mysqld.service
+        state: started
+        enabled: true
+    - name: Enable mysqld
+      service:
+        name: mysqld
+        state: started
+        enabled: true
+...
