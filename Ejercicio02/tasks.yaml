@@ -1,0 +1,86 @@
+- name: Instalación de OpenSSH
+  hosts: webservers
+  tasks:
+    - name: Instalando paquete Openssh
+      package:
+        name: openssh-server
+        state: latest
+    - name : Servicio openssh activado
+      service:
+        name: sshd
+        state: started
+        enabled: true
+    - name: Instalando Firewalld
+      package:
+        name: firewalld
+        state: latest
+    - name : Activar Firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+    - name : Firewall-python
+      package:
+        name: python-firewall
+        state: latest
+    - name: Firewall ssh
+      ansible.posix.firewalld:
+        port: 22/tcp
+        permanent: yes 
+        immediate: true
+        state: enabled
+- name: Instalación de Nginx
+  hosts: webservers
+  #remote_user: root
+  tasks:
+    - name: Instalando el paquete nginx
+      package:
+        name: nginx
+        state: latest
+    - name: Servicio Nginx arrancado
+      service: #"name=nginx state=started enabled=true"
+        name: nginx
+        state: started
+        enabled: true
+    - name: abrir el firewall para 80
+      ansible.posix.firewalld:
+        port: 80/tcp
+        permanent: yes
+        immediate: true
+        state: enabled
+    - name: abrir el firewall para 443
+      ansible.posix.firewalld:
+        port: 443/tcp
+        immediate: true
+        permanent: yes
+        state: enabled
+    - name: Copia el fichero index.html
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/
+        owner: nginx
+        group: nginx
+        mode: '0644'
+- name: Instalación de MySQL
+  hosts: webservers
+  tasks:
+    - name: Instalación de mysql
+      package:
+        name: mysql-server
+        state: latest
+    - name: Servicio mysql.service
+      service:
+        name: mysqld.service
+        state: started
+        enabled: true
+    - name: Enable mysqld
+      service:
+        name: mysqld
+        state: started
+        enabled: true
+    - name: abrir el firewall para 3306
+      ansible.posix.firewalld:
+        port: 3306/tcp
+        immediate: true
+        permanent: yes
+        state: enabled
