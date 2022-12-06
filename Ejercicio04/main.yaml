@@ -1,0 +1,10 @@
+- hosts: docker
+  tasks:
+    - debug:
+        msg: "{{ansible_facts.os_family}}"
+- name: Docker Installation
+  import_playbook: tasks/installation.yaml
+- name: Deploy container
+  import_playbook: tasks/docker.yaml
+- name: Wordpress
+  import_playbook: tasks/docker_compose.yaml
